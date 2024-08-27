@@ -15,11 +15,11 @@ namespace PlanifiqueAPI.Controllers
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
         private readonly UserManager<User> _userManager;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(AccountService accountService, UserManager<User> userManager, TokenService tokenService)
+        public AccountController(IAccountService accountService, UserManager<User> userManager, ITokenService tokenService)
         {
             _accountService = accountService;
             _userManager = userManager;
@@ -57,7 +57,8 @@ namespace PlanifiqueAPI.Controllers
 
             var token = _tokenService.GenerateToken(claims);
 
-            return Ok(new { Token = token });
+            //return Ok(new { Token = token });
+            return Ok(token);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

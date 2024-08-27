@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "apis1": {
+      "restored": true,
+      "restoreTime": "2024-08-27T00:09:20.7645901Z"
+    },
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2024-08-27T00:09:17.4465808Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "0242a2ec-df25-4e28-9886-c03adc4cdb74"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "planifique-rg"
+    }
+  }
+}

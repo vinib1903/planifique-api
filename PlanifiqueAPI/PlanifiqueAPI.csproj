@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Interfaces\" />
     <Folder Include="Infraestructure\Repositories\" />
   </ItemGroup>
 

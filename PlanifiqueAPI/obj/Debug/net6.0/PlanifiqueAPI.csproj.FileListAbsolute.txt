@@ -73,3 +73,4 @@ C:\dev\PlanifiqueAPI\PlanifiqueAPI\obj\Debug\net6.0\refint\PlanifiqueAPI.dll
 C:\dev\PlanifiqueAPI\PlanifiqueAPI\obj\Debug\net6.0\PlanifiqueAPI.pdb
 C:\dev\PlanifiqueAPI\PlanifiqueAPI\obj\Debug\net6.0\PlanifiqueAPI.genruntimeconfig.cache
 C:\dev\PlanifiqueAPI\PlanifiqueAPI\obj\Debug\net6.0\ref\PlanifiqueAPI.dll
+C:\dev\PlanifiqueAPI\PlanifiqueAPI\obj\Debug\net6.0\PlanifiqueAPI.sourcelink.json
