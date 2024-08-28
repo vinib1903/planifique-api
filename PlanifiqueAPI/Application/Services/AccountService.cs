@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PlanifiqueAPI.Application.DTOs;
 using PlanifiqueAPI.Core.Entities;
+using PlanifiqueAPI.Core.Interfaces;
 using PlanifiqueAPI.Infraestructure.Data;
 
 namespace PlanifiqueAPI.Application.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly IEmailService _emailService;
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, AppDbContext context)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, AppDbContext context, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<IdentityResult> RegisterUserAsync(RegisterUserDto registerDto)
@@ -56,8 +59,11 @@ namespace PlanifiqueAPI.Application.Services
 
                     _context.Categories.AddRange(defaultCategories);
                     await _context.SaveChangesAsync();
-
                     await transaction.CommitAsync();
+
+                    await _emailService.SendWelcomeEmailAsync(registerDto.Email, registerDto.Nome);
+
+                    //return Ok("Usuário registrado com sucesso!");
 
                     return result;
                 }

@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using PlanifiqueAPI.Core.Interfaces;
+using System.Net.Mail;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +57,24 @@ builder.Services.AddCors(opts =>
                .AllowAnyMethod()
                .AllowAnyOrigin();
     });
+});
+
+
+// Configuração do SmtpClient
+builder.Services.AddSingleton(new SmtpClient
+{
+    Host = "smtp.gmail.com",
+    Port = 587,
+    EnableSsl = true,
+    Credentials = new NetworkCredential("vinib1903@gmail.com", "abvo rlty csep vxge")
+});
+
+// Registrar o EmailService
+builder.Services.AddTransient<IEmailService>(provider =>
+{
+    var smtpClient = provider.GetRequiredService<SmtpClient>();
+    var fromEmail = "vinib1903@gmail.com";
+    return new EmailService(smtpClient, fromEmail);
 });
 
 // Configure DbContext

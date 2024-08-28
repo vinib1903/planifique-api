@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "PlanifiqueAPI.Controllers.AccountController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Account/change-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changePasswordDto",
+        "Type": "PlanifiqueAPI.Application.DTOs.ChangePasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlanifiqueAPI.Controllers.AccountController",
     "Method": "DeleteAccount",
     "RelativePath": "api/Account/delete",
     "HttpMethod": "DELETE",
