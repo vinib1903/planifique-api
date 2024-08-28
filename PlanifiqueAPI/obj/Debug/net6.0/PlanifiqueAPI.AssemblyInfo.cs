@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlanifiqueAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdc21ec970a22997411bdef5d06b6b464577afdc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae3108ee1cee82cb0cc02dbdded538e47bbaaabc")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlanifiqueAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlanifiqueAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

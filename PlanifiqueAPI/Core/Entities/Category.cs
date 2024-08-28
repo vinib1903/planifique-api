@@ -14,5 +14,8 @@ namespace PlanifiqueAPI.Core.Entities
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        // Propriedade de navegação para Transactions
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
     }
 }

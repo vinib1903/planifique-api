@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PlanifiqueAPI.Application.DTOs;
 using PlanifiqueAPI.Core.Entities;
+using PlanifiqueAPI.Infraestructure.Data;
 
 namespace PlanifiqueAPI.Application.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public async Task<IdentityResult> RegisterUserAsync(RegisterUserDto registerDto)
@@ -30,9 +33,42 @@ namespace PlanifiqueAPI.Application.Services
                 FotoPerfil = registerDto.FotoPerfil
             };
 
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-            return result;
+            // Inicia a transação
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+                    if (!result.Succeeded)
+                    {
+                        await transaction.RollbackAsync();
+                        return result;
+                    }
+
+                  
+                    var defaultCategories = new List<Category>
+                    {
+                        new Category { Nome = "Locomoção", UserId = user.Id },
+                        new Category { Nome = "Moradia", UserId = user.Id },
+                        new Category { Nome = "Alimentação", UserId = user.Id }
+                    };
+
+                    _context.Categories.AddRange(defaultCategories);
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return result;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
+
 
         public async Task<SignInResult> LoginUserAsync(LoginUserDto loginDto)
         {
@@ -73,22 +109,22 @@ namespace PlanifiqueAPI.Application.Services
                 hasChanges = true;
             }
 
-            if (!string.IsNullOrEmpty(updateDto.Password))
-            {
-                if (updateDto.Password != updateDto.RePassword)
-                {
-                    return IdentityResult.Failed(new IdentityError { Description = "As senhas não coincidem." });
-                }
+            //if (!string.IsNullOrEmpty(updateDto.Password))
+            //{
+            //    if (updateDto.Password != updateDto.RePassword)
+            //    {
+            //        return IdentityResult.Failed(new IdentityError { Description = "As senhas não coincidem." });
+            //    }
 
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await _userManager.ResetPasswordAsync(user, token, updateDto.Password);
-                if (!result.Succeeded)
-                {
-                    return result;
-                }
+            //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //    var result = await _userManager.ResetPasswordAsync(user, token, updateDto.Password);
+            //    if (!result.Succeeded)
+            //    {
+            //        return result;
+            //    }
 
-                hasChanges = true;
-            }
+            //    hasChanges = true;
+            //}
 
             if (!string.IsNullOrEmpty(updateDto.FotoPerfil) && updateDto.FotoPerfil != user.FotoPerfil)
             {
@@ -102,10 +138,26 @@ namespace PlanifiqueAPI.Application.Services
                 return updateResult;
             }
 
-            // Se não houve alterações, retorna um sucesso sem modificações
             return IdentityResult.Success;
         }
 
+        public async Task<IdentityResult> ChangePasswordAsync(string userId, string currentPassword, string newPassword, string confirmPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado." });
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "As novas senhas não coincidem." });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+            return result;
+        }
 
     }
 }

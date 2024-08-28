@@ -88,6 +88,7 @@ builder.Services.AddAuthentication(options =>
 
 // Register application services
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITokenService, TokenService>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();

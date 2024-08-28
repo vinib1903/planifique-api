@@ -11,5 +11,6 @@ namespace PlanifiqueAPI.Application.Services
         Task<SignInResult> LoginUserAsync(LoginUserDto loginDto);
         Task<IdentityResult> DeleteAccountAsync(string userId);
         Task<IdentityResult> UpdateUserAsync(string userId, UpdateUserDto updateDto);
+        Task<IdentityResult> ChangePasswordAsync(string userId, string currentPassword, string newPassword, string confirmPassword);
     }
 }

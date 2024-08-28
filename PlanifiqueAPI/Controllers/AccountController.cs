@@ -94,5 +94,22 @@ namespace PlanifiqueAPI.Controllers
 
             return Ok("Perfil atualizado com sucesso.");
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized("Usuário não está autenticado.");
+
+            var result = await _accountService.ChangePasswordAsync(userId, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword, changePasswordDto.ConfirmPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("Senha alterada com sucesso.");
+        }
     }
 }

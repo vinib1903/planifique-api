@@ -2,17 +2,17 @@
 
 public class RegisterUserDto
 {
-    [Required]
+    [Required(ErrorMessage = "O campo 'Nome' é obrigatório.")]
     public string Nome { get; set; }
 
-    [Required]
-    [EmailAddress]
+    [Required(ErrorMessage = "O campo 'Email' é obrigatório.")]
+    [EmailAddress(ErrorMessage = "Informe um email válido.")]
     public string Email { get; set; }
 
     public string FotoPerfil { get; set; }
 
     [Required]
-    [MinLength(6, ErrorMessage = "A senha deve ter pelo menos 6 caracteres.")]
+    [MinLength(6, ErrorMessage = "A senha deve ter pelo menos 8 caracteres.")]
     public string Password { get; set; }
 
     [Required]
