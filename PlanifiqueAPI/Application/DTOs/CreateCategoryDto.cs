@@ -6,5 +6,6 @@ namespace PlanifiqueAPI.Application.DTOs
     {
         [Required]
         public string Nome { get; set; }
+        public string Color { get; set; }
     }
 }

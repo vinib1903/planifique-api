@@ -19,7 +19,7 @@ namespace PlanifiqueAPI.Application.Services
         {
             return await _context.Categories
                 .Where(c => c.UserId == userId)
-                .Select(c => new ReadCategoryDto { Id = c.Id, Nome = c.Nome })
+                .Select(c => new ReadCategoryDto { Id = c.Id, Nome = c.Nome, Color = c.Color })
                 .ToListAsync();
         }
 
@@ -30,7 +30,7 @@ namespace PlanifiqueAPI.Application.Services
 
             if (category == null) return null;
 
-            return new ReadCategoryDto { Id = category.Id, Nome = category.Nome };
+            return new ReadCategoryDto { Id = category.Id, Nome = category.Nome, Color = category.Color };
         }
 
         public async Task<ReadCategoryDto> CreateCategoryAsync(CreateCategoryDto categoryDto, string userId)
@@ -38,7 +38,8 @@ namespace PlanifiqueAPI.Application.Services
             var category = new Category
             {
                 Nome = categoryDto.Nome,
-                UserId = userId
+                UserId = userId,
+                Color = categoryDto.Color
             };
 
             _context.Categories.Add(category);
@@ -55,6 +56,7 @@ namespace PlanifiqueAPI.Application.Services
             if (category == null) return false;
 
             category.Nome = categoryDto.Nome;
+            category.Color = categoryDto.Color;
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
 

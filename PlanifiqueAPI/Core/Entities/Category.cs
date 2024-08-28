@@ -12,6 +12,8 @@ namespace PlanifiqueAPI.Core.Entities
 
         [Required]
         public string UserId { get; set; }
+        [Required]
+        public string Color { get; set; }
 
         public User User { get; set; }
 
