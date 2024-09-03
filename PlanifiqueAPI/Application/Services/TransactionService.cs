@@ -9,8 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PlanifiqueAPI.Application.Services
 {
-    public class TransactionService : ITransactionService
+    public class TransactionService : ITransactionService // implementa a interface
     {
+        // injeção de dependência
         private readonly AppDbContext _context;
 
         public TransactionService(AppDbContext context)
@@ -18,6 +19,7 @@ namespace PlanifiqueAPI.Application.Services
             _context = context;
         }
 
+        // método para criar uma transação
         public async Task<ReadTransactionDto> CreateTransactionAsync(CreateTransactionDto transactionDto, string userId)
         {
             var transaction = new Transaction
@@ -29,6 +31,7 @@ namespace PlanifiqueAPI.Application.Services
                 UserId = userId
             };
 
+            // adiciona ao banco de dados e salva a operação
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
@@ -43,6 +46,7 @@ namespace PlanifiqueAPI.Application.Services
             };
         }
 
+        // recupera as transações do usuário
         public async Task<IEnumerable<ReadTransactionDto>> GetTransactionsAsync(string userId)
         {
             return await _context.Transactions
@@ -59,6 +63,7 @@ namespace PlanifiqueAPI.Application.Services
                 .ToListAsync();
         }
 
+        // recupera uma transação usando o seu id
         public async Task<ReadTransactionDto> GetTransactionByIdAsync(int id, string userId)
         {
             var transaction = await _context.Transactions
@@ -78,6 +83,7 @@ namespace PlanifiqueAPI.Application.Services
             };
         }
 
+        // atualiza uma transação
         public async Task<bool> UpdateTransactionAsync(int id, CreateTransactionDto transactionDto, string userId)
         {
             var transaction = await _context.Transactions
@@ -97,6 +103,7 @@ namespace PlanifiqueAPI.Application.Services
             return true;
         }
 
+        // remove uma transação do banco de dados
         public async Task<bool> DeleteTransactionAsync(int id, string userId)
         {
             var transaction = await _context.Transactions

@@ -5,8 +5,9 @@ using System.Text;
 
 namespace PlanifiqueAPI.Application.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService : ITokenService // implementação da interface
     {
+        // injeção das dependências
         private readonly string _key;
         private readonly string _issuer;
         private readonly string _audience;
@@ -18,6 +19,7 @@ namespace PlanifiqueAPI.Application.Services
             _audience = audience;
         }
 
+        // método para gerar um token de acesso
         public string GenerateToken(IEnumerable<Claim> claims)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));

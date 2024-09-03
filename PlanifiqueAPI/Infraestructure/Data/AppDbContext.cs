@@ -11,25 +11,27 @@ namespace PlanifiqueAPI.Infraestructure.Data
         {
         }
 
+        // cria as tabelas do banco de dados
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
+        // define o comportamento das entidades quando o modelo é criado (é usado quando o EF Core está construindo o modelo de dados com base nas entidades)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurando a precisão do campo Valor
+            // configurando a precisão do campo Valor
             modelBuilder.Entity<Transaction>()
-                .Property(t => t.Valor)
-                .HasPrecision(18, 2);
+                .Property(t => t.Valor) // propriedade valor na entidade transaction
+                .HasPrecision(18, 2); // 18: quantidade de dígitos que o campo pode armazenar; 2: casas após a vírgula
 
-            // Configurando a relação entre Transaction e Category
+            // configurando a relação entre transaction e category
             modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Category)
-                .WithMany(c => c.Transactions) // Atualizado para usar a propriedade de navegação Transactions
-                .HasForeignKey(t => t.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction); // Configura DeleteBehavior como NoAction
+                .HasOne(t => t.Category) // uma transaction só possui uma categoria
+                .WithMany(c => c.Transactions) // atualizado para usar a propriedade de navegação transactions (uma categoria pode ter muitas transações)
+                .HasForeignKey(t => t.CategoryId) // o campo CategoryId em transections se refere ao campo Id de Categories
+                .OnDelete(DeleteBehavior.NoAction); // configura DeleteBehavior como NoAction, evitando a deleção em cascata de entidades relacionadas
         }
     }
 }
